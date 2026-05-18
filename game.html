@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hangmangle</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="game">
+  <header class="game-header">
+    <h1>Hangmangle</h1>
+    <div class="room-info">
+      Room <span id="room-code" class="code"></span>
+      <button id="copy-code-btn" class="header-btn" title="Copy a join link for this room">Copy link</button>
+      &middot; Word length <span id="word-length"></span>
+      <button id="reset-btn" class="header-btn" title="Clear the board and start a new game">Start over</button>
+    </div>
+  </header>
+
+  <dialog id="reset-dialog">
+    <form method="dialog">
+      <h3>Start a new game?</h3>
+      <p class="dialog-body">This clears the word, eliminated letters, and both gallows. Teams and players stay the same.</p>
+      <label>Word length
+        <select id="reset-word-length">
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+        </select>
+      </label>
+      <div class="dialog-actions">
+        <button value="cancel" type="submit">Cancel</button>
+        <button value="confirm" type="submit" class="primary">Start over</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="action-banner" class="action-banner" hidden>
+    <div class="action-text" id="action-text"></div>
+    <div class="action-buttons" id="action-buttons"></div>
+  </div>
+
+  <main class="game-main">
+    <section class="column team-column" id="col-A">
+      <h2 class="team-name" id="team-A-name"></h2>
+      <div class="player-list" id="players-A"></div>
+      <div class="team-actions" id="actions-A" hidden>
+        <button class="action-btn guess-word-btn" data-team="A">Guess Word</button>
+        <button class="action-btn call-bluff-btn" data-team="A" hidden>Call Bluff</button>
+      </div>
+      <div class="gallows-slot" id="gallows-A"></div>
+      <div class="chat-section" id="chat-A" hidden>
+        <div class="chat-label">Team chat</div>
+        <div class="chat-messages" id="messages-A"></div>
+        <form class="chat-form" id="chat-form-A">
+          <input type="text" id="chat-input-A" placeholder="Message your team..." maxlength="280" autocomplete="off">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+      <div class="candidate-section" id="cand-A" hidden>
+        <div class="cand-header">
+          <span class="cand-label">Candidate words</span>
+          <button type="button" class="cand-clear-btn" hidden>Clear all</button>
+        </div>
+        <div class="candidate-list" id="candidates-A"></div>
+        <form class="cand-form" id="cand-form-A">
+          <input type="text" id="cand-input-A" placeholder="Add a candidate word..." maxlength="40" autocomplete="off">
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="column center-column">
+      <div id="word-slots" class="word-slots">
+        <!-- slot cells render in game.js -->
+      </div>
+      <div class="turn-row">
+        <div class="turn-info" id="turn-info"></div>
+        <button id="switch-turn-btn" class="switch-btn" title="Switch turn">⇄ Switch</button>
+      </div>
+      <button id="undo-btn" disabled>Undo last action</button>
+      <div class="elim-section">
+        <div class="elim-label">Eliminated</div>
+        <div class="eliminated" id="eliminated"></div>
+        <button class="elim-add" id="elim-add-btn" title="Add eliminated letter">+ letter</button>
+      </div>
+    </section>
+
+    <section class="column team-column" id="col-B">
+      <h2 class="team-name" id="team-B-name"></h2>
+      <div class="player-list" id="players-B"></div>
+      <div class="team-actions" id="actions-B" hidden>
+        <button class="action-btn guess-word-btn" data-team="B">Guess Word</button>
+        <button class="action-btn call-bluff-btn" data-team="B" hidden>Call Bluff</button>
+      </div>
+      <div class="gallows-slot" id="gallows-B"></div>
+      <div class="chat-section" id="chat-B" hidden>
+        <div class="chat-label">Team chat</div>
+        <div class="chat-messages" id="messages-B"></div>
+        <form class="chat-form" id="chat-form-B">
+          <input type="text" id="chat-input-B" placeholder="Message your team..." maxlength="280" autocomplete="off">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+      <div class="candidate-section" id="cand-B" hidden>
+        <div class="cand-header">
+          <span class="cand-label">Candidate words</span>
+          <button type="button" class="cand-clear-btn" hidden>Clear all</button>
+        </div>
+        <div class="candidate-list" id="candidates-B"></div>
+        <form class="cand-form" id="cand-form-B">
+          <input type="text" id="cand-input-B" placeholder="Add a candidate word..." maxlength="40" autocomplete="off">
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <p id="game-msg" class="msg"></p>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>

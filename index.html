@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hangmangle</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="entry">
+  <main class="entry-main">
+    <h1>Hangmangle</h1>
+    <p class="tagline">A two-team Hangman variant. Voice chat on Zoom; this app tracks the board.</p>
+
+    <div class="entry-panels">
+      <section class="panel" id="create-panel">
+        <h2>Create a room</h2>
+        <label>Your name
+          <input id="create-name" maxlength="24" autocomplete="off">
+        </label>
+        <label>Your team name
+          <input id="create-team-mine" maxlength="24" autocomplete="off" placeholder="e.g. The Vowel Movement">
+        </label>
+        <label>Opponent team name
+          <input id="create-team-other" maxlength="24" autocomplete="off" placeholder="e.g. Consonant Crusaders">
+        </label>
+        <label>Word length
+          <select id="create-length">
+            <option>4</option>
+            <option selected>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+          </select>
+        </label>
+        <button id="create-btn">Create room</button>
+      </section>
+
+      <section class="panel" id="join-panel">
+        <h2>Join a room</h2>
+        <label>Room code
+          <input id="join-code" maxlength="4" autocomplete="off" class="code-input">
+        </label>
+        <label>Your name
+          <input id="join-name" maxlength="24" autocomplete="off">
+        </label>
+        <button id="join-lookup-btn">Find room</button>
+        <div id="team-pick" hidden>
+          <p>Which team are you on?</p>
+          <div class="team-buttons">
+            <button id="pick-team-A" class="team-btn"></button>
+            <button id="pick-team-B" class="team-btn"></button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <p id="entry-msg" class="msg"></p>
+  </main>
+
+  <script type="module" src="entry.js"></script>
+</body>
+</html>
