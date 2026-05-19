@@ -97,6 +97,7 @@ document.getElementById("join-lookup-btn").addEventListener("click", async () =>
 
   setMsg("Looking up room...");
   try {
+    await signIn();
     const snap = await getDoc(doc(db, "rooms", code));
     if (!snap.exists()) {
       setMsg(`No room with code ${code}.`, true);

@@ -1,0 +1,53 @@
+rules_version = '2';
+
+// Hangmangle Firestore security rules.
+//
+// Threat model: friendly multiplayer game between people who already know each
+// other and have voluntarily shared a 4-letter room code. The goal is not
+// adversarial isolation — it is preventing:
+//   * randos with no room code from doing anything,
+//   * a player from spoofing as another player,
+//   * a player from reading the OTHER team's private chat / candidate list.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----- Rooms -----
+    // Anyone signed in (Anonymous Auth counts) can read and mutate a room doc.
+    // The game is intentionally cooperative — anyone in the room can update the
+    // board, switch turns, etc.
+    match /rooms/{roomCode} {
+      allow read, create, update, delete: if request.auth != null;
+
+      // ----- Players -----
+      // Anyone signed in can see the roster.
+      // Each player can only write their OWN player doc — the doc ID must match
+      // the caller's UID. This prevents impersonating another player.
+      match /players/{playerId} {
+        allow read: if request.auth != null;
+        allow create, update, delete: if request.auth != null
+          && request.auth.uid == playerId;
+      }
+
+      // ----- Per-team chats -----
+      // To read or write team X's chat messages, you must be a player in this
+      // room AND your player.team must equal X.
+      match /chats/{team}/messages/{msgId} {
+        allow read, write: if request.auth != null
+          && exists(/databases/$(database)/documents/rooms/$(roomCode)/players/$(request.auth.uid))
+          && get(/databases/$(database)/documents/rooms/$(roomCode)/players/$(request.auth.uid)).data.team == team;
+      }
+
+      // ----- Per-team candidates -----
+      // Same restriction as chats: only team X members read/write team X's
+      // candidate words.
+      match /candidates/{team}/words/{wordId} {
+        allow read, write: if request.auth != null
+          && exists(/databases/$(database)/documents/rooms/$(roomCode)/players/$(request.auth.uid))
+          && get(/databases/$(database)/documents/rooms/$(roomCode)/players/$(request.auth.uid)).data.team == team;
+      }
+    }
+
+    // Anything not matched above is denied by default (rules_version = '2').
+  }
+}
