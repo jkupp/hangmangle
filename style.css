@@ -79,6 +79,10 @@ label {
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
+body.join-only .entry-panels {
+  grid-template-columns: minmax(0, 420px);
+  justify-content: center;
+}
 
 .panel {
   background: var(--panel);
@@ -177,14 +181,18 @@ label {
 }
 .team-actions[hidden] { display: none; }
 .action-btn {
-  background: var(--accent);
-  color: white;
-  border: none;
-  font-size: 0.9rem;
-  padding: 0.4rem 0.8rem;
+  background: white;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-size: 0.78rem;
+  padding: 0.22rem 0.55rem;
+  align-self: flex-start;
 }
 .action-btn[hidden] { display: none; }
-.action-btn:hover { filter: brightness(1.08); }
+.action-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
 
 .game-main {
   display: grid;

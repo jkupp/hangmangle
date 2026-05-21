@@ -183,8 +183,11 @@ async function declareWinner(team) {
   });
 }
 
-async function newGame() {
-  await resetGame(currentRoom.wordLength);
+function openResetDialog() {
+  const dialog = document.getElementById("reset-dialog");
+  document.getElementById("reset-word-length").value = String(currentRoom.wordLength);
+  dialog.returnValue = "";
+  dialog.showModal();
 }
 
 async function undo() {
@@ -362,7 +365,7 @@ function renderActionBanner(data) {
     strong.textContent = team.name;
     textEl.appendChild(strong);
     textEl.append(" wins!");
-    btns.appendChild(makeBtn("New game", "primary", () => newGame()));
+    btns.appendChild(makeBtn("New game", "primary", () => openResetDialog()));
     return;
   }
 
@@ -407,7 +410,8 @@ function renderTeamActions(data) {
 function renderEliminated(data) {
   const zone = document.getElementById("eliminated");
   zone.innerHTML = "";
-  for (const letter of eliminatedList(data)) {
+  const letters = [...eliminatedList(data)].sort();
+  for (const letter of letters) {
     const chip = document.createElement("span");
     chip.className = "elim-chip";
     chip.textContent = letter;
@@ -693,9 +697,7 @@ function wireStaticHandlers() {
   const dialog = document.getElementById("reset-dialog");
   document.getElementById("reset-btn").addEventListener("click", () => {
     if (!currentRoom) return;
-    document.getElementById("reset-word-length").value = String(currentRoom.wordLength);
-    dialog.returnValue = "";
-    dialog.showModal();
+    openResetDialog();
   });
   dialog.addEventListener("close", () => {
     if (dialog.returnValue !== "confirm") return;

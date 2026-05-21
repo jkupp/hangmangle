@@ -141,10 +141,13 @@ document.getElementById("join-code").addEventListener("input", (e) => {
   e.target.value = e.target.value.toUpperCase();
 });
 
-// If we arrived with ?room=XXXX, pre-fill the join code and focus the name field.
+// If we arrived with ?room=XXXX, pre-fill the join code, hide the create
+// panel (the user clearly came here to join), and focus the name field.
 const urlRoom = new URLSearchParams(window.location.search).get("room");
 if (urlRoom) {
   const code = urlRoom.toUpperCase().slice(0, CODE_LENGTH);
   document.getElementById("join-code").value = code;
+  document.getElementById("create-panel").hidden = true;
+  document.body.classList.add("join-only");
   document.getElementById("join-name").focus();
 }
