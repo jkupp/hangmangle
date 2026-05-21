@@ -569,24 +569,28 @@ function renderCandidates() {
     container.appendChild(empty);
     return;
   }
-  for (const cand of currentCandidates) {
+
+  const evaluated = currentCandidates.map((c) => ({
+    ...c,
+    status: validateCandidate(c.text),
+  }));
+  const valid = evaluated.filter((c) => c.status.valid);
+  const invalid = evaluated.filter((c) => !c.status.valid);
+
+  const makeRow = (cand) => {
     const row = document.createElement("div");
     row.className = "candidate";
-
     const text = document.createElement("span");
     text.className = "cand-text";
     text.textContent = cand.text;
     row.appendChild(text);
-
-    const status = validateCandidate(cand.text);
-    if (!status.valid) {
+    if (!cand.status.valid) {
       row.classList.add("invalid");
       const reason = document.createElement("span");
       reason.className = "cand-reason";
-      reason.textContent = status.reason;
+      reason.textContent = cand.status.reason;
       row.appendChild(reason);
     }
-
     const remove = document.createElement("button");
     remove.className = "cand-remove";
     remove.type = "button";
@@ -594,9 +598,17 @@ function renderCandidates() {
     remove.title = "Remove";
     remove.addEventListener("click", () => removeCandidate(cand.id));
     row.appendChild(remove);
+    return row;
+  };
 
-    container.appendChild(row);
+  for (const cand of valid) container.appendChild(makeRow(cand));
+  if (valid.length && invalid.length) {
+    const divider = document.createElement("div");
+    divider.className = "cand-divider";
+    divider.textContent = "Ruled out";
+    container.appendChild(divider);
   }
+  for (const cand of invalid) container.appendChild(makeRow(cand));
 }
 
 async function addCandidate(text) {
