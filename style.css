@@ -584,11 +584,24 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
   display: flex;
   flex-direction: column;
 }
+.rules-dialog:not([open]) { display: none; }
 .rules-content {
   padding: 1.5rem 1.75rem 1rem;
-  overflow-y: auto;
+  overflow-y: scroll;
   flex: 1;
 }
+/* Always-visible scrollbar styling, so users see there's more to read. */
+.rules-content::-webkit-scrollbar { width: 10px; }
+.rules-content::-webkit-scrollbar-track {
+  background: #f0ece1;
+  border-radius: 5px;
+}
+.rules-content::-webkit-scrollbar-thumb {
+  background: #b8b09d;
+  border-radius: 5px;
+}
+.rules-content::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+.rules-content { scrollbar-color: #b8b09d #f0ece1; }
 .rules-content h2 {
   margin: 0 0 0.6rem;
   font-size: 1.45rem;
