@@ -71,6 +71,7 @@ function snapshotForUndo() {
     teamBBodyParts: currentRoom.teamB?.bodyParts ?? 0,
     winner: currentRoom.winner ?? null,
     respondedSinceTurnStart: currentRoom.respondedSinceTurnStart ?? false,
+    currentTurn: currentRoom.currentTurn ?? "A",
   };
 }
 
@@ -83,15 +84,15 @@ function gameOver() {
 }
 
 async function setSlot(index, letter) {
-  if (gameOver()) return;
+  if (gameOver()) return false;
   if (currentRoom.pendingAction) {
     setMsg("Resolve the pending action first.", true);
-    return;
+    return false;
   }
   const L = letter ? letter.toUpperCase() : null;
   if (L && eliminatedList(currentRoom).includes(L)) {
     setMsg(`"${L}" is already eliminated — remove it first.`, true);
-    return;
+    return false;
   }
   const newSlots = [...currentRoom.slots];
   newSlots[index] = L;
@@ -100,6 +101,13 @@ async function setSlot(index, letter) {
     lastAction: snapshotForUndo(),
     respondedSinceTurnStart: true,
   });
+  return true;
+}
+
+function showPlacementDialog() {
+  const dialog = document.getElementById("placement-dialog");
+  dialog.returnValue = "";
+  dialog.showModal();
 }
 
 async function addEliminated(letter) {
@@ -120,14 +128,17 @@ async function addEliminated(letter) {
   const turn = currentRoom.currentTurn;
   const teamKey = `team${turn}`;
   const newBodyParts = (currentRoom[teamKey]?.bodyParts ?? 0) + 1;
+  const otherTeam = turn === "A" ? "B" : "A";
   const updates = {
     eliminated: [...list, L],
     lastAction: snapshotForUndo(),
     [`${teamKey}.bodyParts`]: newBodyParts,
-    respondedSinceTurnStart: true,
+    respondedSinceTurnStart: false,
+    // Auto-switch the turn after an elimination.
+    currentTurn: otherTeam,
   };
   if (newBodyParts >= 10) {
-    updates.winner = turn === "A" ? "B" : "A";
+    updates.winner = otherTeam;
   }
   await updateDoc(roomRef, updates);
 }
@@ -202,6 +213,7 @@ async function undo() {
   if ("teamBBodyParts" in last) updates["teamB.bodyParts"] = last.teamBBodyParts;
   if ("winner" in last) updates.winner = last.winner;
   if ("respondedSinceTurnStart" in last) updates.respondedSinceTurnStart = last.respondedSinceTurnStart;
+  if ("currentTurn" in last) updates.currentTurn = last.currentTurn;
   await updateDoc(roomRef, updates);
 }
 
@@ -272,7 +284,8 @@ function beginSlotEdit(index) {
     // Sync current state from currentRoom (re-render).
     renderSlots(currentRoom);
     if (save && /^[A-Z]$/.test(value)) {
-      await setSlot(index, value);
+      const ok = await setSlot(index, value);
+      if (ok) showPlacementDialog();
     }
   };
 
@@ -401,9 +414,11 @@ function renderTeamActions(data) {
       continue;
     }
     container.hidden = false;
-    const responded = !!data.respondedSinceTurnStart;
-    guessBtn.hidden = responded;
-    bluffBtn.hidden = !responded;
+    // Both action buttons are visible whenever it's this team's turn.
+    // (Originally Call Bluff only appeared after the opponent responded, but
+    // with auto-switch on action that window is gone.)
+    guessBtn.hidden = false;
+    bluffBtn.hidden = false;
   }
 }
 
@@ -740,6 +755,14 @@ function wireStaticHandlers() {
   for (const btn of document.querySelectorAll(".call-bluff-btn")) {
     btn.addEventListener("click", () => startAction("callBluff"));
   }
+
+  const placementDialog = document.getElementById("placement-dialog");
+  placementDialog.addEventListener("close", () => {
+    if (placementDialog.returnValue === "finish") {
+      toggleTurn();
+    }
+    // "another" (place in another slot) or "" (Escape): no-op; user continues editing.
+  });
 
   const copyBtn = document.getElementById("copy-code-btn");
   copyBtn.addEventListener("click", async () => {
