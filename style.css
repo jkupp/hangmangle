@@ -599,4 +599,27 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
 .switch-btn:hover { background: var(--accent); color: white; }
 .switch-btn[hidden] { display: none; }
 
+.turn-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-left: 0.5rem;
+}
+.timer-display {
+  font-family: ui-monospace, monospace;
+  min-width: 2.8em;
+  text-align: right;
+  color: var(--fg);
+}
+.timer-btn {
+  background: white;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-size: 0.72rem;
+  padding: 0.12rem 0.45rem;
+}
+.timer-btn:hover { color: var(--accent); border-color: var(--accent); }
+
 #game-msg { padding: 0 1.25rem; }

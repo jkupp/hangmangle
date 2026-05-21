@@ -110,6 +110,72 @@ function showPlacementDialog() {
   dialog.showModal();
 }
 
+// ----- Turn timer helpers -----
+
+function timerStartFields() {
+  // Field updates that "start a fresh timer at now" — used on every turn
+  // boundary so the new team starts at 0:00 running.
+  return {
+    "turnTimer.startedAt": new Date(),
+    "turnTimer.pausedAtMs": null,
+  };
+}
+
+function computeElapsedMs(timer) {
+  if (!timer || !timer.startedAt) return 0;
+  if (timer.pausedAtMs != null) return Math.max(0, timer.pausedAtMs);
+  const startMs = timer.startedAt.toMillis ? timer.startedAt.toMillis() : 0;
+  if (!startMs) return 0;
+  return Math.max(0, Date.now() - startMs);
+}
+
+function formatElapsed(ms) {
+  const total = Math.floor(ms / 1000);
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function tickTimer() {
+  if (!currentRoom) return;
+  const display = document.getElementById("timer-display");
+  if (!display) return;
+  display.textContent = formatElapsed(computeElapsedMs(currentRoom.turnTimer));
+}
+
+function renderTimerControls(data) {
+  const toggleBtn = document.getElementById("timer-toggle-btn");
+  if (!toggleBtn) return;
+  const paused = data.turnTimer?.pausedAtMs != null;
+  toggleBtn.textContent = paused ? "Resume" : "Pause";
+  toggleBtn.title = paused ? "Resume timer" : "Pause timer";
+}
+
+async function pauseOrResumeTimer() {
+  const timer = currentRoom?.turnTimer;
+  if (!timer || !timer.startedAt) {
+    // No timer yet — start a fresh one running.
+    await updateDoc(roomRef, timerStartFields());
+    return;
+  }
+  if (timer.pausedAtMs != null) {
+    // Resume: shift startedAt forward so elapsed continues from where we paused.
+    await updateDoc(roomRef, {
+      "turnTimer.startedAt": new Date(Date.now() - timer.pausedAtMs),
+      "turnTimer.pausedAtMs": null,
+    });
+  } else {
+    // Pause: freeze current elapsed.
+    await updateDoc(roomRef, {
+      "turnTimer.pausedAtMs": computeElapsedMs(timer),
+    });
+  }
+}
+
+async function resetTimer() {
+  await updateDoc(roomRef, timerStartFields());
+}
+
 async function addEliminated(letter) {
   if (gameOver()) return;
   if (currentRoom.pendingAction) {
@@ -136,6 +202,7 @@ async function addEliminated(letter) {
     respondedSinceTurnStart: false,
     // Auto-switch the turn after an elimination.
     currentTurn: otherTeam,
+    ...timerStartFields(),
   };
   if (newBodyParts >= 10) {
     updates.winner = otherTeam;
@@ -158,6 +225,7 @@ async function resetGame(newWordLength) {
     lastAction: null,
     respondedSinceTurnStart: false,
     pendingAction: null,
+    ...timerStartFields(),
   });
 }
 
@@ -170,6 +238,7 @@ async function toggleTurn() {
   await updateDoc(roomRef, {
     currentTurn: currentRoom.currentTurn === "A" ? "B" : "A",
     respondedSinceTurnStart: false,
+    ...timerStartFields(),
   });
 }
 
@@ -471,6 +540,8 @@ function renderRoom(data) {
   renderAvailableLetters(data);
   renderGallows(data);
   renderCandidates();
+  renderTimerControls(data);
+  tickTimer();
   document.getElementById("undo-btn").disabled = !data.lastAction;
 }
 
@@ -767,6 +838,21 @@ function wireStaticHandlers() {
     }
     // "another" (place in another slot) or "" (Escape): no-op; user continues editing.
   });
+
+  document.getElementById("timer-toggle-btn").addEventListener("click", () => {
+    pauseOrResumeTimer().catch((err) => {
+      console.error("timer toggle failed", err);
+      setMsg("Could not update timer.", true);
+    });
+  });
+  document.getElementById("timer-reset-btn").addEventListener("click", () => {
+    resetTimer().catch((err) => {
+      console.error("timer reset failed", err);
+      setMsg("Could not reset timer.", true);
+    });
+  });
+  // Tick the timer display every second.
+  setInterval(tickTimer, 1000);
 
   const copyBtn = document.getElementById("copy-code-btn");
   copyBtn.addEventListener("click", async () => {

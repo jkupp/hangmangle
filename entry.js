@@ -67,6 +67,10 @@ document.getElementById("create-btn").addEventListener("click", async () => {
       winner: null,
       respondedSinceTurnStart: false,
       pendingAction: null,
+      turnTimer: {
+        startedAt: serverTimestamp(),
+        pausedAtMs: null,
+      },
     });
     await setDoc(doc(db, "rooms", code, "players", user.uid), {
       name,
