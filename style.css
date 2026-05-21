@@ -589,9 +589,15 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
   padding: 1.5rem 1.75rem 1rem;
   overflow-y: scroll;
   flex: 1;
+  /* Let the flex child shrink below its content height so scrolling works
+     deterministically inside the flex column. */
+  min-height: 0;
 }
 /* Always-visible scrollbar styling, so users see there's more to read. */
-.rules-content::-webkit-scrollbar { width: 10px; }
+.rules-content::-webkit-scrollbar {
+  -webkit-appearance: none; /* force classic, non-overlay scrollbars */
+  width: 10px;
+}
 .rules-content::-webkit-scrollbar-track {
   background: #f0ece1;
   border-radius: 5px;
