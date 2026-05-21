@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   writeBatch,
 } from "./firebase.js";
+import { rulesHtml } from "./rules.js";
 
 const params = new URLSearchParams(window.location.search);
 const roomCode = (params.get("room") || "").toUpperCase();
@@ -837,6 +838,14 @@ function wireStaticHandlers() {
       toggleTurn();
     }
     // "another" (place in another slot) or "" (Escape): no-op; user continues editing.
+  });
+
+  const rulesDialog = document.getElementById("rules-dialog");
+  document.getElementById("rules-content").innerHTML = rulesHtml;
+  document.getElementById("rules-btn").addEventListener("click", () => {
+    rulesDialog.returnValue = "";
+    rulesDialog.showModal();
+    rulesDialog.querySelector(".rules-content").scrollTop = 0;
   });
 
   document.getElementById("timer-toggle-btn").addEventListener("click", () => {

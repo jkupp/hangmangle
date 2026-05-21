@@ -13,8 +13,16 @@
       <button id="copy-code-btn" class="header-btn" title="Copy a join link for this room">Copy link</button>
       &middot; Word length <span id="word-length"></span>
       <button id="reset-btn" class="header-btn" title="Clear the board and start a new game">Start over</button>
+      <button id="rules-btn" class="header-btn" title="How to play Hangmangle">How to play</button>
     </div>
   </header>
+
+  <dialog id="rules-dialog" class="rules-dialog">
+    <div class="rules-content" id="rules-content"></div>
+    <form method="dialog" class="rules-close">
+      <button value="close" type="submit" class="primary">Close</button>
+    </form>
+  </dialog>
 
   <dialog id="placement-dialog">
     <form method="dialog">

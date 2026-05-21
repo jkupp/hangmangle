@@ -575,6 +575,91 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
 .dialog-actions button:hover { border-color: var(--accent); }
 .dialog-actions button.primary:hover { filter: brightness(1.08); }
 
+/* Rules overlay */
+.rules-dialog {
+  max-width: 640px;
+  width: calc(100vw - 2rem);
+  max-height: 85vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.rules-content {
+  padding: 1.5rem 1.75rem 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
+.rules-content h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.45rem;
+}
+.rules-content h3 {
+  margin: 1.4rem 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--accent);
+}
+.rules-content h4 {
+  margin: 1rem 0 0.3rem;
+  font-size: 0.95rem;
+}
+.rules-content p {
+  margin: 0 0 0.75rem;
+  line-height: 1.55;
+}
+.rules-content ul {
+  margin: 0 0 0.85rem;
+  padding-left: 1.3rem;
+}
+.rules-content li {
+  margin-bottom: 0.3rem;
+  line-height: 1.5;
+}
+.rules-content .board {
+  font-family: ui-monospace, monospace;
+  background: #fafaf6;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+}
+.rules-callout {
+  background: #fff7d8;
+  border: 1px solid #d9c264;
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+}
+.rules-close {
+  padding: 0.75rem 1.75rem 1.25rem;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.rules-close button.primary {
+  background: var(--accent);
+  color: white;
+  border: 1px solid var(--accent);
+}
+.rules-close button.primary:hover { filter: brightness(1.08); }
+
+/* Entry-page "How to play" link */
+.entry-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.link-btn {
+  background: transparent;
+  color: var(--accent);
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.link-btn:hover { color: var(--fg); }
+
 .turn-row {
   display: flex;
   align-items: center;
@@ -591,12 +676,12 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
 
 .switch-btn {
   background: white;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  font-size: 0.85rem;
-  padding: 0.3rem 0.65rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-size: 0.72rem;
+  padding: 0.12rem 0.45rem;
 }
-.switch-btn:hover { background: var(--accent); color: white; }
+.switch-btn:hover { color: var(--accent); border-color: var(--accent); }
 .switch-btn[hidden] { display: none; }
 
 .turn-timer {

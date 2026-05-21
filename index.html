@@ -54,7 +54,17 @@
     </div>
 
     <p id="entry-msg" class="msg"></p>
+    <p class="entry-footer">
+      <button id="rules-btn" type="button" class="link-btn">How to play</button>
+    </p>
   </main>
+
+  <dialog id="rules-dialog" class="rules-dialog">
+    <div class="rules-content" id="rules-content"></div>
+    <form method="dialog" class="rules-close">
+      <button value="close" type="submit" class="primary">Close</button>
+    </form>
+  </dialog>
 
   <script type="module" src="entry.js"></script>
 </body>

@@ -6,6 +6,7 @@ import {
   setDoc,
   serverTimestamp,
 } from "./firebase.js";
+import { rulesHtml } from "./rules.js";
 
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // no I or O
 const CODE_LENGTH = 4;
@@ -143,6 +144,15 @@ document.getElementById("pick-team-B").addEventListener("click", () => joinAsTea
 // Uppercase the room code as the user types.
 document.getElementById("join-code").addEventListener("input", (e) => {
   e.target.value = e.target.value.toUpperCase();
+});
+
+// Rules overlay.
+const rulesDialog = document.getElementById("rules-dialog");
+document.getElementById("rules-content").innerHTML = rulesHtml;
+document.getElementById("rules-btn").addEventListener("click", () => {
+  rulesDialog.returnValue = "";
+  rulesDialog.showModal();
+  rulesDialog.querySelector(".rules-content").scrollTop = 0;
 });
 
 // If we arrived with ?room=XXXX, pre-fill the join code, hide the create
