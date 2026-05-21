@@ -173,11 +173,14 @@ async function toggleTurn() {
   });
 }
 
-async function startAction(type) {
+async function startAction(type, initiatorTeam) {
   if (gameOver()) return;
   if (currentRoom.pendingAction) return;
+  const initiator = initiatorTeam === "A" || initiatorTeam === "B"
+    ? initiatorTeam
+    : currentRoom.currentTurn;
   await updateDoc(roomRef, {
-    pendingAction: { type, initiator: currentRoom.currentTurn },
+    pendingAction: { type, initiator },
   });
 }
 
@@ -409,16 +412,17 @@ function renderTeamActions(data) {
     const container = document.getElementById(`actions-${team}`);
     const guessBtn = container.querySelector(".guess-word-btn");
     const bluffBtn = container.querySelector(".call-bluff-btn");
-    if (data.winner || data.pendingAction || data.currentTurn !== team) {
+    if (data.winner || data.pendingAction) {
       container.hidden = true;
       continue;
     }
     container.hidden = false;
-    // Both action buttons are visible whenever it's this team's turn.
-    // (Originally Call Bluff only appeared after the opponent responded, but
-    // with auto-switch on action that window is gone.)
-    guessBtn.hidden = false;
-    bluffBtn.hidden = false;
+    // Guess Word lives on the currently-guessing team's side.
+    // Call Bluff lives on the OPPOSITE team's side — they're the ones who'd
+    // be challenging the response that just happened.
+    const isMyTurn = data.currentTurn === team;
+    guessBtn.hidden = !isMyTurn;
+    bluffBtn.hidden = isMyTurn;
   }
 }
 
@@ -750,10 +754,10 @@ function wireStaticHandlers() {
   });
 
   for (const btn of document.querySelectorAll(".guess-word-btn")) {
-    btn.addEventListener("click", () => startAction("guessWord"));
+    btn.addEventListener("click", () => startAction("guessWord", btn.dataset.team));
   }
   for (const btn of document.querySelectorAll(".call-bluff-btn")) {
-    btn.addEventListener("click", () => startAction("callBluff"));
+    btn.addEventListener("click", () => startAction("callBluff", btn.dataset.team));
   }
 
   const placementDialog = document.getElementById("placement-dialog");

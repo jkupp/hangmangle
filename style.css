@@ -93,6 +93,7 @@ body.join-only .entry-panels {
   flex-direction: column;
   gap: 0.75rem;
 }
+.panel[hidden] { display: none; }
 
 .code-input { text-transform: uppercase; letter-spacing: 0.2em; font-family: ui-monospace, monospace; }
 
@@ -175,9 +176,11 @@ body.join-only .entry-panels {
 
 .team-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 0.4rem;
   margin-bottom: 0.75rem;
+  min-height: 1.6rem;
 }
 .team-actions[hidden] { display: none; }
 .action-btn {
@@ -186,13 +189,13 @@ body.join-only .entry-panels {
   border: 1px solid var(--border);
   font-size: 0.78rem;
   padding: 0.22rem 0.55rem;
-  align-self: flex-start;
 }
 .action-btn[hidden] { display: none; }
 .action-btn:hover {
   color: var(--accent);
   border-color: var(--accent);
 }
+.call-bluff-btn { margin-left: auto; }
 
 .game-main {
   display: grid;
