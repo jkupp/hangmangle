@@ -419,6 +419,22 @@ function renderEliminated(data) {
   }
 }
 
+function renderAvailableLetters(data) {
+  const container = document.getElementById("available-letters");
+  container.innerHTML = "";
+  const used = new Set();
+  for (const s of data.slots || []) if (s) used.add(s);
+  for (const L of eliminatedList(data)) used.add(L);
+  for (let i = 0; i < 26; i++) {
+    const letter = String.fromCharCode(65 + i);
+    const span = document.createElement("span");
+    span.className = "avail-letter";
+    if (used.has(letter)) span.classList.add("used");
+    span.textContent = letter;
+    container.appendChild(span);
+  }
+}
+
 function renderRoom(data) {
   if (!data) {
     setMsg("Room not found.", true);
@@ -433,6 +449,7 @@ function renderRoom(data) {
   renderTeamActions(data);
   renderSlots(data);
   renderEliminated(data);
+  renderAvailableLetters(data);
   renderGallows(data);
   renderCandidates();
   document.getElementById("undo-btn").disabled = !data.lastAction;

@@ -280,6 +280,47 @@ body.join-only .entry-panels {
   border: 1px solid var(--accent);
 }
 
+.avail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.6rem;
+  margin-top: 0.25rem;
+}
+.avail-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.avail-grid {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 0.2rem;
+}
+.avail-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0;
+  border-radius: 3px;
+  background: #fafaf6;
+  border: 1px solid var(--border);
+  font-family: ui-monospace, monospace;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--fg);
+  user-select: none;
+}
+.avail-letter.used {
+  color: var(--muted);
+  background: transparent;
+  border-color: transparent;
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
 .chat-section {
   display: flex;
   flex-direction: column;
