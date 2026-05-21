@@ -178,6 +178,7 @@ body.join-only .entry-panels {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.4rem;
   margin-bottom: 0.75rem;
   min-height: 1.6rem;
@@ -195,7 +196,6 @@ body.join-only .entry-panels {
   color: var(--accent);
   border-color: var(--accent);
 }
-.call-bluff-btn { margin-left: auto; }
 
 .game-main {
   display: grid;
