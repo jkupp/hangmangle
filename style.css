@@ -579,6 +579,12 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
 .rules-dialog {
   max-width: 640px;
   width: calc(100vw - 2rem);
+  /* Use explicit height (not just max-height) so the inner flex child
+     has a deterministic size to fill. Without this, Safari collapses
+     the content to zero and Chrome/Firefox size it to content, both of
+     which break the always-visible scrollbar. */
+  height: 75vh;
+  min-height: 360px;
   max-height: 85vh;
   padding: 0;
   display: flex;
