@@ -784,6 +784,15 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
   margin-top: 1.5rem;
   text-align: center;
 }
+.dedication {
+  margin: 2rem auto 0;
+  max-width: 520px;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
 .link-btn {
   background: transparent;
   color: var(--accent);
