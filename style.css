@@ -598,6 +598,19 @@ dialog label { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 
   /* Let the flex child shrink below its content height so scrolling works
      deterministically inside the flex column. */
   min-height: 0;
+  position: relative;
+}
+/* Bottom-edge fade as a "more content below" hint. Works in every browser
+   regardless of whether macOS chooses to render the scrollbar persistently. */
+.rules-content::after {
+  content: "";
+  display: block;
+  position: sticky;
+  bottom: -1rem;
+  margin: -2rem -1.75rem -1rem;
+  height: 2rem;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--panel) 90%);
+  pointer-events: none;
 }
 /* Always-visible scrollbar styling, so users see there's more to read. */
 .rules-content::-webkit-scrollbar {
