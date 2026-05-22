@@ -3,12 +3,39 @@
 <head>
 <meta charset="utf-8">
 <title>Hangmangle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="entry">
   <main class="entry-main">
-    <h1>Hangmangle</h1>
-    <p class="tagline">A two-team Hangman variant. Voice chat on Zoom; this app tracks the board.</p>
+    <header class="entry-header">
+      <svg viewBox="0 0 90 110" class="entry-hangman" aria-hidden="true">
+        <g stroke="#3a3a3a" stroke-width="3" fill="none" stroke-linecap="round">
+          <line x1="6" y1="105" x2="62" y2="105"/>
+          <line x1="20" y1="105" x2="20" y2="10"/>
+          <line x1="18" y1="12" x2="64" y2="12"/>
+          <line x1="20" y1="24" x2="32" y2="12" stroke-width="2"/>
+          <line x1="62" y1="12" x2="62" y2="28" stroke-width="2"/>
+        </g>
+        <g stroke="#1c1c1c" stroke-width="2.5" fill="none" stroke-linecap="round">
+          <circle cx="62" cy="38" r="9"/>
+          <circle cx="59" cy="36" r="0.9" fill="#1c1c1c" stroke="none"/>
+          <circle cx="65" cy="36" r="0.9" fill="#1c1c1c" stroke="none"/>
+          <path d="M58 41 Q62 44 66 41"/>
+          <line x1="62" y1="47" x2="62" y2="76"/>
+          <line x1="62" y1="56" x2="51" y2="68"/>
+          <line x1="62" y1="56" x2="73" y2="68"/>
+          <line x1="62" y1="76" x2="53" y2="94"/>
+          <line x1="62" y1="76" x2="71" y2="94"/>
+        </g>
+      </svg>
+      <div class="entry-title-block">
+        <h1>Hangmangle</h1>
+        <p class="tagline">A two-team Hangman variant. Voice chat handles the back-and-forth; this app tracks the board.</p>
+      </div>
+    </header>
 
     <div class="entry-panels">
       <section class="panel" id="create-panel">

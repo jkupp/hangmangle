@@ -62,16 +62,93 @@ label {
 
 /* ---------- Entry page ---------- */
 
+body.entry {
+  --entry-display: "Patrick Hand", "Marker Felt", "Segoe Print", cursive;
+  --entry-headline: "Caveat", "Patrick Hand", cursive;
+  --entry-accent: #c84132;
+}
+
 .entry-main {
   max-width: 780px;
-  margin: 4rem auto;
+  margin: 3.5rem auto;
   padding: 0 1.5rem;
+}
+
+.entry-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.entry-hangman {
+  width: 92px;
+  height: 112px;
+  flex-shrink: 0;
+  transform: rotate(-4deg);
+  filter: drop-shadow(0 2px 0 rgba(28, 28, 28, 0.08));
+}
+
+.entry-title-block { flex: 1; min-width: 0; }
+
+body.entry h1 {
+  font-family: var(--entry-headline);
+  font-size: 4rem;
+  line-height: 1;
+  margin: 0 0 0.4rem;
+  color: var(--entry-accent);
+  letter-spacing: 0.005em;
+  transform: rotate(-1deg);
+  transform-origin: left center;
 }
 
 .tagline {
   color: var(--muted);
-  margin-top: 0;
+  margin: 0;
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.45;
 }
+
+body.entry .panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(28, 28, 28, 0.05);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+body.entry .panel:hover {
+  box-shadow: 0 8px 22px rgba(28, 28, 28, 0.09);
+  transform: translateY(-2px);
+}
+body.entry .panel h2 {
+  font-family: var(--entry-display);
+  font-size: 1.55rem;
+  margin: 0 0 0.4rem;
+  color: var(--fg);
+  letter-spacing: 0.01em;
+}
+
+body.entry #create-btn,
+body.entry #join-lookup-btn {
+  background: var(--entry-accent);
+  font-size: 1rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 5px;
+  align-self: flex-start;
+}
+body.entry #create-btn:hover,
+body.entry #join-lookup-btn:hover { filter: brightness(1.06); }
+
+body.entry .team-btn {
+  font-family: var(--entry-display);
+  font-size: 1.1rem;
+  border-width: 1.5px;
+}
+
+body.entry .link-btn { color: var(--entry-accent); }
+body.entry .link-btn:hover { color: var(--fg); }
 
 .entry-panels {
   display: grid;
